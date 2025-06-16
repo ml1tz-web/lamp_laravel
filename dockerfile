@@ -18,13 +18,14 @@ RUN rm -rf /var/www/html/*
 
 WORKDIR /var/www/html
 
-COPY ./my-app /var/www/html
+# Copy the entire application
+COPY ./my-app/ .
 
-# Copy .env.example to .env if .env doesn't exist
-RUN cp .env.example .env
+# Ensure .env file exists
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
 
-# Install Composer dependencies
-RUN composer install --no-interaction --no-dev --optimize-autoloader
+# Install Composer dependencies with progress
+RUN composer install --no-interaction --no-dev --optimize-autoloader --prefer-dist
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html && \
