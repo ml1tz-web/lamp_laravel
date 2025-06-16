@@ -20,6 +20,9 @@ WORKDIR /var/www/html
 
 COPY ./my-app /var/www/html
 
+# Copy .env.example to .env if .env doesn't exist
+RUN cp .env.example .env
+
 # Install Composer dependencies
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
@@ -28,7 +31,7 @@ RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html/storage
 
 # Generate application key if not exists
-RUN php artisan key:generate --no-interaction
+RUN php artisan key:generate --force
 
 # Clear and cache configuration
 RUN php artisan config:cache && \
