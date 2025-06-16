@@ -20,8 +20,20 @@ WORKDIR /var/www/html
 
 COPY ./my-app /var/www/html
 
+# Install Composer dependencies
+RUN composer install --no-interaction --no-dev --optimize-autoloader
+
+# Set proper permissions
 RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html/storage
+
+# Generate application key if not exists
+RUN php artisan key:generate --no-interaction
+
+# Clear and cache configuration
+RUN php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache
 
 RUN echo '<Directory /var/www/html/public>\n\
     AllowOverride All\n\
