@@ -5,7 +5,7 @@ RUN a2enmod rewrite
 RUN docker-php-ext-install pdo pdo_mysql mysqli
 
 # Install Node.js and npm (Node.js 18.x)
-RUN apt-get update && apt-get install -y curl gnupg && \
+RUN apt-get update && apt-get install -y curl gnupg git && \
     curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
